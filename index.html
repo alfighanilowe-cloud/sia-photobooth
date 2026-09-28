@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIA Photobooth Studio</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="brand">
+            <h2>📸 SnapAcc</h2>
+            <p>SIA Photobooth System</p>
+        </div>
+        <nav class="menu">
+            <button class="nav-btn active" onclick="switchTab('dashboard')">Dashboard</button>
+            <button class="nav-btn" onclick="switchTab('transaksi')">Input Transaksi</button>
+            <button class="nav-btn" onclick="switchTab('jurnal')">Jurnal Umum</button>
+            <button class="nav-btn" onclick="switchTab('buku-besar')">Buku Besar</button>
+            <button class="nav-btn" onclick="switchTab('laporan')">Laporan Keuangan</button>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="content">
+
+        <!-- DASHBOARD TAB -->
+        <section id="dashboard" class="tab-content active">
+            <header class="top-header">
+                <h1>Overview Keuangan</h1>
+                <p>Ringkasan performa finansial usaha Photobooth Anda.</p>
+            </header>
+            <div class="cards-grid">
+                <div class="card gold-card">
+                    <h3>Total Kas</h3>
+                    <p id="dash-kas">Rp 0</p>
+                </div>
+                <div class="card">
+                    <h3>Pendapatan Sewa</h3>
+                    <p id="dash-pendapatan">Rp 0</p>
+                </div>
+                <div class="card">
+                    <h3>Total Beban</h3>
+                    <p id="dash-beban">Rp 0</p>
+                </div>
+                <div class="card">
+                    <h3>Laba Bersih</h3>
+                    <p id="dash-laba">Rp 0</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- INPUT TRANSAKSI TAB -->
+        <section id="transaksi" class="tab-content">
+            <header class="top-header">
+                <h1>Input Transaksi Baru</h1>
+                <p>Catat transaksi harian operasional photobooth.</p>
+            </header>
+            <div class="form-container">
+                <form id="form-transaksi" onsubmit="tambahTransaksi(event)">
+                    <div class="form-group">
+                        <label>Tanggal Transaksi</label>
+                        <input type="date" id="tgl-transaksi" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Keterangan / Deskripsi</label>
+                        <input type="text" id="ket-transaksi" placeholder="Contoh: Penerimaan Sewa Event Wedding" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Akun Debit</label>
+                            <select id="akun-debit" required>
+                                <option value="101">101 - Kas</option>
+                                <option value="102">102 - Piutang Usaha</option>
+                                <option value="103">103 - Perlengkapan Foto (Paper/Props)</option>
+                                <option value="121">121 - Peralatan Kamera & Lighting</option>
+                                <option value="501">501 - Beban Sewa Tempat</option>
+                                <option value="502">502 - Beban Listrik & Internet</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Akun Kredit</label>
+                            <select id="akun-kredit" required>
+                                <option value="401">401 - Pendapatan Jasa Photobooth</option>
+                                <option value="101">101 - Kas</option>
+                                <option value="301">301 - Modal Pemilik</option>
+                                <option value="201">201 - Utang Usaha</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nominal (Rp)</label>
+                        <input type="number" id="nominal-transaksi" min="1" placeholder="500000" required>
+                    </div>
+                    <button type="submit" class="btn-primary">Simpan Transaksi</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- JURNAL UMUM TAB -->
+        <section id="jurnal" class="tab-content">
+            <header class="top-header">
+                <h1>Jurnal Umum</h1>
+                <p>Catatan kronologis seluruh transaksi akuntansi.</p>
+            </header>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Keterangan & Akun</th>
+                            <th>Ref</th>
+                            <th>Debit (Rp)</th>
+                            <th>Kredit (Rp)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-jurnal">
+                        <!-- Data Jurnal disuntikkan via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- BUKU BESAR TAB -->
+        <section id="buku-besar" class="tab-content">
+            <header class="top-header">
+                <h1>Buku Besar (General Ledger)</h1>
+                <p>Pengelompokan mutasi saldo per akun.</p>
+            </header>
+            <div id="container-buku-besar">
+                <!-- Rincian Buku Besar disuntikkan via JS -->
+            </div>
+        </section>
+
+        <!-- LAPORAN KEUANGAN TAB -->
+        <section id="laporan" class="tab-content">
+            <header class="top-header">
+                <h1>Laporan Keuangan</h1>
+                <p>Ringkasan Laba Rugi dan Neraca Keuangan.</p>
+            </header>
+            
+            <div class="reports-grid">
+                <!-- Laba Rugi -->
+                <div class="report-box">
+                    <h2>Laporan Laba Rugi</h2>
+                    <table class="report-table">
+                        <tr>
+                            <td><strong>Pendapatan Jasa Photobooth</strong></td>
+                            <td id="rpt-pendapatan">Rp 0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total Beban Operasional</strong></td>
+                            <td id="rpt-beban">Rp 0</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Laba / (Rugi) Bersih</strong></td>
+                            <td id="rpt-laba-bersih">Rp 0</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Neraca Ringkas -->
+                <div class="report-box">
+                    <h2>Neraca Ringkas</h2>
+                    <table class="report-table">
+                        <tr>
+                            <th colspan="2">Aset (Aktiva)</th>
+                        </tr>
+                        <tr>
+                            <td>Kas</td>
+                            <td id="rpt-kas">Rp 0</td>
+                        </tr>
+                        <tr>
+                            <td>Peralatan & Perlengkapan</td>
+                            <td id="rpt-aset-tetap">Rp 0</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Total Aset</strong></td>
+                            <td id="rpt-total-aset">Rp 0</td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">Kewajiban & Ekuitas (Pasiva)</th>
+                        </tr>
+                        <tr>
+                            <td>Utang Usaha</td>
+                            <td id="rpt-utang">Rp 0</td>
+                        </tr>
+                        <tr>
+                            <td>Modal Pemilik + Laba</td>
+                            <td id="rpt-ekuitas">Rp 0</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>Total Pasiva</strong></td>
+                            <td id="rpt-total-pasiva">Rp 0</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
